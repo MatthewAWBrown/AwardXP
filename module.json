@@ -7,7 +7,6 @@
     "minimumCoreVersion": "12.331",
     "compatibleCoreVersion": "12.331",
     "scripts": ["scripts/main.js"],
-    "esmodules": [],
     "styles": ["styles/style.css"],
     "manifest": "module.json",
     "download": "https://github.com/MatthewAWBrown/AwardXP.git"
