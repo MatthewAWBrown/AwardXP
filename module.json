@@ -1,0 +1,21 @@
+{
+    "name": "AwardXP",
+    "title": "Award XP",
+    "description": "A module that distributes XP to player characters",
+    "version": "0.0.1",
+    "authors": [
+        {
+            "name": "Matthew Brown",
+            "url": "https://github.com/MatthewAWBrown"
+        }
+    ],
+    "compatibility": {
+        "minimum": "12.331",
+        "verified": "12.331"
+    },
+    "scripts": ["scripts/main.js"],
+    "esmodules": [],
+    "styles": ["styles/style.css"],
+    "manifest": "module.json",
+    "download": "https://github.com/MatthewAWBrown/AwardXP.git"
+}
