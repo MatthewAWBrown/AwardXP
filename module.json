@@ -14,7 +14,9 @@
     "verified": "12.331"
   },
   "esmodules": [
-    "scripts/main.js"
+    "scripts/main.js",
+    "scripts/combatXPHandler.js",
+    "scripts/distributeXpButton.js"
   ],
   "styles": [
     "styles/style.css"

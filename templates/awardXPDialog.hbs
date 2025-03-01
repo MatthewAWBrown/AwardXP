@@ -1,0 +1,51 @@
+<form>
+    <div class="form-group">
+        <label for="xp-amount">XP to distribute:</label>
+        <input type="number" id="xp-amount" value="100" min="0" />
+    </div>
+
+    <div class="form-group">
+        <label>Select Characters:</label>
+        <button type="button" id="deselect-all">Deselect All</button>
+        <div class="distribute-xp--actor-list">
+            {{#each playerCharacters}}
+            <label>
+                <input type="checkbox" class="xp-target" data-id="{{this.id}}" checked>
+                <div class="distribute-xp--actor-icon" style="background-image: url({{this.img}})"></div>
+                <span>{{this.name}}</span>
+            </label>
+            {{/each}}
+        </div>
+    </div>
+</form>
+
+<style>
+    .distribute-xp--actor-list{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .distribute-xp--actor-list label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+    }
+    .distribute-xp--actor-icon{
+        width: 50px;
+        height: 50px;
+        background-size: cover;
+        border-radius: 50%;
+        border: 2px solid transparent;
+    }
+    .xp-target:checked + .distribute-xp--actor-icon {
+        border-color: green;
+    }
+</style>
+
+<script>
+    document.getElementById("deselect-all").addEventListener("click", () => {
+        document.querySelectorAll(".xp-target").forEach(checkbox => checkbox.checked = false);
+    });
+</script>
