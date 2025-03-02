@@ -41,6 +41,9 @@ export class CombatXPHandler {
      * @param {Object} combat -- the combat instance being deleted
      */
     static async _combatXPHandler(combat){
+        console.log("Running _combatXPHandler...");
+        console.log("Combat ID:", combat.id);
+        console.log("Number of combatants:", combat.turns.length);
         const defaultMultiplier = 1;
         const enemies = [];
         const allies = [];
@@ -82,7 +85,11 @@ export class CombatXPHandler {
             buttons: {
                 okay: {
                     label: "OK",
-                    callback: html => this._distributeXP(html, combatData)
+                    //callback: html => this._distributeXP(html, combatData)
+                    callback: async(html) => {
+                        await CombatXPHandler._distributeXP(html, combatData);
+                        console.log("Distributing XP...");
+                    }
                 },
                 cancel: {
                     label: "Cancel",
@@ -148,7 +155,7 @@ export class CombatXPHandler {
 
             // update totals at bottom
             html.find('#total-xp').text(totalXp);
-            html.find('#allied-receive-count').text(numDivisors);
+            html.find('#ally-receive-count').text(numDivisors);
             html.find('#divisor-xp').text(xpPerDivisor);
             
         }
@@ -160,6 +167,10 @@ export class CombatXPHandler {
      * @param {*} combat -- the combat instance being deleted
      */
     static async _distributeXP(html, { combat, allies }) {
+        console.log("XP Distribution triggered...");
+        console.log("Combat ID:", combat.id);
+        console.log("Number of allies:", allies.length);
+
         const getSelectedTokens = type => html.find(`#${type}-actor-list label`).has("input:checked").map((_, el) => canvas.tokens.get($(el).data("tokenId"))).get();
         const selectedAlliedTokens = getSelectedTokens("friendly");
         const selectedHostileTokens = getSelectedTokens("hostile");
@@ -225,6 +236,8 @@ export class CombatXPHandler {
      */
 
     static async applyXP(actor, amount) {
+        console.log(`Applying ${amount} XP to ${actor.name}.`);
+        
         return await actor.update({
             "system.details.xp.value": actor.system.details.xp.value + amount
         });
@@ -234,6 +247,8 @@ export class CombatXPHandler {
      * Creatres a chat message and outputs to chat
      */
     static async outputToChat(content) {
+        console.log("Sending chat message:", content);
+
         const user = game.userId,
             alias = "Award XP",
             type = CONST.CHAT_MESSAGE_TYPES.OTHER;
