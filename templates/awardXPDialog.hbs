@@ -6,16 +6,18 @@
 
     <div class="form-group">
         <label>Select Characters:</label>
-        <button type="button" id="deselect-all">Deselect All</button>
-        <div class="distribute-xp--actor-list">
-            {{#each playerCharacters}}
-            <label>
-                <input type="checkbox" class="xp-target" data-id="{{this.id}}" checked>
-                <div class="distribute-xp--actor-icon" style="background-image: url({{this.img}})"></div>
-                <span>{{this.name}}</span>
-            </label>
-            {{/each}}
-        </div>
+        {{!--<button type="button" id="deselect-all">Deselect All</button>--}}
+        <section id="actor-select">
+            <div class="distribute-xp--actor-list">
+                {{#each playerCharacters}}
+                    <label>
+                        <input type="checkbox" class="xp-target" data-id="{{this.id}}" checked>
+                        <div class="distribute-xp--actor-icon" style="background-image: url({{this.img}})"></div>
+                        <span>{{this.name}}</span>
+                    </label>
+                {{/each}}
+            </div>
+        </section>
     </div>
 </form>
 

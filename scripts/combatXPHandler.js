@@ -1,4 +1,15 @@
+const PATH = `modules/AwardXP`;
+
 export class CombatXPHandler {
+
+    static async init() {
+        console.log("CombatXPHandler initialized...");
+        Hooks.on("renderDialog", async (app, html, data) => {
+            if (app.data?.title === game.i18n.localize("COMBAT.EndTitle")) {
+                CombatXPHandler._onRenderDialog(app, html, data);
+            }
+        });
+    }
 
     static _onRenderDialog(app, html, data) {
 
@@ -45,12 +56,12 @@ export class CombatXPHandler {
 
             switch (turn.token.disposition) {
                 case -1:
-                    hostiles.push(turnData);
+                    enemies.push(turnData);
                     continue;
 
                 case 1:
                     allies.push(turnData);
-                    const deselectByDefault = turn.actor.getFlag(NAME, FLAGS.CombatXPHandler.deselectByDefault);
+                    const deselectByDefault = turn.actor.getFlag("AwardXP", "CombatXPHandler.deselectByDefault");
 
                     if (!deselectByDefault) defaultSelectedAllies.push(turnData);
 
@@ -152,7 +163,7 @@ export class CombatXPHandler {
         const getSelectedTokens = type => html.find(`#${type}-actor-list label`).has("input:checked").map((_, el) => canvas.tokens.get($(el).data("tokenId"))).get();
         const selectedAlliedTokens = getSelectedTokens("friendly");
         const selectedHostileTokens = getSelectedTokens("hostile");
-        const defaultMultiplier = +html.find("#xp-modifier").val();
+        let defaultMultiplier = +html.find("#xp-modifier").val();
 
         if(selectedHostileTokens.length === 2) defaultMultiplier = 1.5;
         else if (selectedHostileTokens.length >= 3 && selectedHostileTokens.length <= 6) defaultMultiplier = 2;
@@ -176,7 +187,7 @@ export class CombatXPHandler {
                 </ul>
             `);
 
-            let levelUps = selectedAlliedTokens.filter(({actor}) => actor.system.details.xp.value >= actor.system.details.xp.max);
+            let levelUps = selectedAlliedTokens.filter(({ actor }) => actor.system.details.xp.value >= actor.system.details.xp.max);
             if (levelUps.length) {
                 await this.outputToChat(`
                     <p><strong>Level ups!</strong></p>
@@ -193,16 +204,16 @@ export class CombatXPHandler {
         // E.G., if a summon/companion is deselected, learn to not select it by default next time
         /**  @todo: Change this to a setting feature, RAW companions/summons should be considered for XP division */
 
-        for (const ally of allies) {
-            const hasFlag = allied.actor.setFlag(NAME, FLAGS.distributeXP.deselectByDefault, true);
-            const isSelected = selectedAlliedTokens.find(selected => selected.actor.id === allied.actor.id);
+        // for (const ally of allies) {
+        //     const hasFlag = allies.actor.setFlag(NAME, FLAGS.distributeXP.deselectByDefault, true);
+        //     const isSelected = selectedAlliedTokens.find(selected => selected.actor.id === allied.actor.id);
 
-            if (!hasFlag && !isSelected) {
-                await allied.actor.setFlag(NAME, FLAGS.distributeXP.deselectByDefault, true);
-            } else if (hasFlag && isSelected) {
-                await allied.actor.unsetFlag(NAME, FLAGS.distributeXP.deselectByDefault);
-            }
-        }
+        //     if (!hasFlag && !isSelected) {
+        //         await allied.actor.setFlag(NAME, FLAGS.distributeXP.deselectByDefault, true);
+        //     } else if (hasFlag && isSelected) {
+        //         await allied.actor.unsetFlag(NAME, FLAGS.distributeXP.deselectByDefault);
+        //     }
+        // }
 
         // Now creatures have been updated, actually delete combat
         await combat.delete();
@@ -215,7 +226,7 @@ export class CombatXPHandler {
 
     static async applyXP(actor, amount) {
         return await actor.update({
-            "data.details.xp.value": actor.system.details.xp.value + amount
+            "system.details.xp.value": actor.system.details.xp.value + amount
         });
     }
 

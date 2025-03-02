@@ -15,8 +15,8 @@
   },
   "esmodules": [
     "scripts/main.js",
-    "scripts/combatXPHandler.js",
-    "scripts/distributeXpButton.js"
+    "scripts/CombatXPHandler.js",
+    "scripts/DistributeXPButton.js"
   ],
   "styles": [
     "styles/style.css"

@@ -1,5 +1,5 @@
 {{#*inline "tokenListItem"}}
-<label data-token-id="{{this.token.id}}" data-actor-name="{{this.actor.name}}" data-xp-amount="{{this.actor.data.data.details.xp.value}}">
+<label data-token-id="{{this.token.id}}" data-actor-name="{{this.actor.name}}" data-xp-amount="{{this.actor.system.details.xp.value}}">
     <input type="checkbox" name="{{this.token.id}}" {{#if isChecked}}checked="checked"{{/if}}>
     <div class="distribute-xp--actor-icon" style="background-image: url({{this.img}})"></div>
     <span class="distribute-xp--actor-xp">+0 XP</span>
@@ -7,38 +7,48 @@
 {{/inline}}
 
 <form>
-    <h2>{{ localize "WORDS.Configuration" }}</h2>
+    <h2>Configuration</h2>
     <div class="form-group">
-        <label for="xp-modifier">{{ localize "COMBATXPHANDLER.DistributeForm.XPModifier" }}</label>
-        <input id="xp-modifier" type="number" value="{{defaultModifier}}">
+        <label for="xp-modifier">XP Modifier</label>
+        <input id="xp-modifier" type="number" value="{{defaultMultiplier}}">
     </div>
 
     <nav class="tabs">
         <a class="item active" data-tab="allies">
             <i class="fas fa-users"></i>
-            {{ localize "COMBATEXPHANDLER.DistributeForm.Allies" }}
+            Allies
         </a>
         <a class="item" data-tab="enemies">
             <i class="fas fa-skull"></i>
-            {{ localize "COMBATXPHANDLER.DistributeForm.Enemies"}}
+            Enemies
         </a>
     </nav>
 
     <section id="actor-select-tabs">
         <div data-tab="allies">
-            <p class="notes">{{ localize "COMBATXPHANDLER.DistributeForm.SelectAllies" }}</p>
+            <p class="notes">Select the allies who will receive XP.</p>
             <div id="allied-actor-list" class="distribute-xp--actor-list">
-                {{#each allied}}
-                    {{> tokenListItem isChecked=(lookup ../defaultSelectedAllies @index)}}
+                {{#each allies}}
+                    {{!--{{> tokenListItem isChecked=(lookup ../defaultSelectedAllies @index)}} --}}
+                    <label>
+                        <input type="checkbox" class="xp-target" data-id="{{this.id}}" checked>
+                        <div class="distribute-xp--actor-icon" style="background-image: url({{this.img}})"></div>
+                        <span>{{this.name}}</span>
+                    </label>
                 {{/each}}
             </div>
         </div>
 
         <div data-tab="enemies" style="display: none;">
-            <p class="notes">{{ localize "COMBATXPHANDLER.DistributeForm.SelectEnemies" }}</p>
+            <p class="notes">Select enemies for XP distribution.</p>
             <div id="enemy-actor-list" class="distribute-xp--actor-list">
                 {{#each enemies}}
-                    {{> tokenListItem isChecked=true}}
+                    {{!--{{> tokenListItem isChecked=true}}--}}
+                    <label>
+                        <input type="checkbox" class="xp-target" data-id="{{this.id}}" checked>
+                        <div class="distribute-xp--actor-icon" style="background-image: url({{this.img}})"></div>
+                        <span>{{this.name}}</span>
+                    </label>
                 {{/each}}
             </div>
         </div>
@@ -46,17 +56,17 @@
 
     <p id="hovered-creature" style="text-align: center;">&nbsp;</p>
 
-    <h2>{{ localize "COMBATXPHANDLER.DistributeForm.Distribution" }}</h2>
+    <h2>Distribution</h2>
     <div class="form-group">
-        <label>{{ localize "COMBATXPHANDLER.DistributeForm.TotalXp" }}</label>
+        <label>Total XP</label>
         <span id="total-xp">-</span>
     </div>
     <div class="form-group">
-        <label>{{ localize "COMBATXPHANDLER.DistributeForm.CreaturesReceiving" }}</label>
+        <label>Creatures Receiving</label>
         <span id="ally-receive-count">-</span>
     </div>
     <div class="form-group">
-        <label>{{ localize "COMBATXPHANDLER.DistributeForm.XpPerCreature" }}</label>
+        <label>XP Per Creature</label>
         <span id="divisor-xp">-</span>
     </div>
 </form>

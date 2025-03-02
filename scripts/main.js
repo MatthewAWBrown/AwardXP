@@ -1,8 +1,8 @@
-import { CombatXPHandler } from "./combatXPHandler.js";
-import { DistributeXPButton } from "./distributeXpButton.js";
+import { CombatXPHandler } from "./CombatXPHandler.js";
+import { DistributeXPButton } from "./DistributeXPButton.js";
 
 Hooks.once("init", () => {
     console.log("Distribute XP Module Initialized!");
     DistributeXPButton.init();
-    new CombatXPHandler;
+    CombatXPHandler.init();
 });
